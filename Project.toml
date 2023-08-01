@@ -1,0 +1,11 @@
+name = "SPCDyn"
+uuid = "7de864ef-0835-4fa2-8bc7-079ff01a26da"
+authors = ["Sean P. Cornelius <spcornelius@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+FastBroadcast = "7034ab61-46d4-4ed7-9d0f-46aef9175898"
+Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+UnPack = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
