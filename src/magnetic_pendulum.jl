@@ -1,6 +1,6 @@
 export MagneticPendulum
 
-struct MagneticPendulum{T, N} <: ODESys
+struct MagneticPendulum{T, N} <: AbstractODESys
     ω::T
     α::T
     h::T

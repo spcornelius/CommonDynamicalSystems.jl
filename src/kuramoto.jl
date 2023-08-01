@@ -1,6 +1,6 @@
 export Kuramoto
 
-struct Kuramoto{AType, ωType} <: ODESys
+struct Kuramoto{AType, ωType} <: AbstractODESys
     A::AType
     ω::ωType
 
