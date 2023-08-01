@@ -40,6 +40,7 @@ function rhs(dθdt, θ, sys::Kuramoto, t)
         Aij = nzv[r]
         dθdt[j] += Aij * sin(θ[i] - θ[j])
     end
+    nothing
 end
 
 function jac(J::AbstractMatrix{T}, θ, sys::Kuramoto, t) where {T <: Real}
@@ -56,4 +57,5 @@ function jac(J::AbstractMatrix{T}, θ, sys::Kuramoto, t) where {T <: Real}
         J[j, i] = v
         J[j, j] -= v
     end
+    nothing
 end
