@@ -1,9 +1,9 @@
 export find_fixed_point, is_stable
 
-function find_fixed_point(sys::sysType, x₀::AbstractVector{T}; kw...) where 
+function find_fixed_point(sys::sysType, x₀::AbstractVector{T}; jac = true, kw...) where 
     {sysType <: AutonomousODESys, T}
     f! = (F, x) -> rhs(F, x, sys)
-    result = if hasmethod(jac, (AbstractMatrix, sysType, AbstractVector{T}))
+    result = if hasmethod(jac, (AbstractMatrix, sysType, AbstractVector{T})) && jac
         n = length(x₀)
         J = zeros(T, n, n)
         j! = (J, x) -> jac(J, x, sys)
