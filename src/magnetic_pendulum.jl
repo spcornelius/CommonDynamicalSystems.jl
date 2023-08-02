@@ -1,6 +1,6 @@
 export MagneticPendulum
 
-struct MagneticPendulum{T, N} <: AbstractODESys
+struct MagneticPendulum{T, N} <: AutonomousODESys
     ω::T
     α::T
     h::T
@@ -29,7 +29,7 @@ MagneticPendulum{T}(sys::MagneticPendulum) where {T} =
 
 @inline magnet_dist(r, rₘ, h) = sqrt(sqeuclidean(r, rₘ) + h^2)
 
-function rhs(du, u, sys::MagneticPendulum, t)
+function rhs(du, u, sys::MagneticPendulum)
     @unpack ω, α, h, r_mag = sys
     @views r, v, dr, dv = u[1:2], u[3:4], du[1:2], du[3:4]
     @.. dr = v
@@ -41,7 +41,7 @@ function rhs(du, u, sys::MagneticPendulum, t)
     nothing
 end
 
-function jac(J::AbstractMatrix{T}, u, sys::MagneticPendulum, t) where {T}
+function jac(J::AbstractMatrix{T}, u, sys::MagneticPendulum) where {T}
     @unpack ω, α,  h, r_mag = sys
     r = @view u[1:2]
 

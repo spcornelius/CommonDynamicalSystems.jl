@@ -1,6 +1,6 @@
 export Kuramoto
 
-struct Kuramoto{AType, ωType} <: AbstractODESys
+struct Kuramoto{AType, ωType} <: AutonomousODESys
     A::AType
     ω::ωType
 
@@ -30,7 +30,7 @@ Kuramoto(g::AbstractGraph, ω) = Kuramoto(adjacency_matrix(g), ω)
 # zero-frequency case
 Kuramoto(g::AbstractGraph) = Kuramoto(adjacency_matrix(g))
 
-function rhs(dθdt, θ, sys::Kuramoto, t)
+function rhs(dθdt, θ, sys::Kuramoto)
     @unpack A, ω = sys
     @.. dθdt = ω
     rows = rowvals(A)
@@ -43,7 +43,7 @@ function rhs(dθdt, θ, sys::Kuramoto, t)
     nothing
 end
 
-function jac(J::AbstractMatrix{T}, θ, sys::Kuramoto, t) where {T <: Real}
+function jac(J::AbstractMatrix{T}, θ, sys::Kuramoto) where {T <: Real}
     @unpack A = sys
     rows = rowvals(A)
     nzv = nonzeros(A)
