@@ -8,8 +8,8 @@ export AbstractODESys, rhs, jac
 abstract type AbstractODESys end;
 
 # dummy functions to define the ODESys interface
-function rhs(dx, x, sys::AbstractODESys, t = 0.0) ::Nothing end
-function jac(J, x, sys::AbstractODESys, t = 0.0) ::Nothing end
+function rhs end
+function jac end
 
 # don't attempt broadcast over an ODESys
 # facilitates broadcasting with "." over methods that accept ODESys alongisde
