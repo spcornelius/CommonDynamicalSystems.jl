@@ -18,6 +18,19 @@ function jac end
 Base.broadcastable(sys::AbstractODESys) = Ref(sys)
 
 # generic out-of-place versions of rhs & jac, for convience
+function rhs(x, sys::AutonomousODESys)
+    dxdt = similar(x)
+    rhs(dxdt, x, sys)
+    return dxdt
+end
+
+function jac(x, sys::AutonomousODESys)
+    n = length(x)
+    J = similar(x, n, n)
+    jac(J, x, sys)
+    return J
+end
+
 function rhs(x, sys::AbstractODESys, t)
     dxdt = similar(x)
     rhs(dxdt, x, sys, t)
