@@ -19,7 +19,7 @@ end
 function is_stable(sys::AutonomousODESys, x::AbstractVector{T}; 
                    tol = zero(T)) where {T}
     n = length(x)
-    J = zeros(T, n, ns)
+    J = zeros(T, n, n)
     jac(J, x, sys)
     λs = eigvals!(J)
     return maximum(real, λs) < -tol
