@@ -50,7 +50,7 @@ function is_stable(sys::sysType, x::x₀Type; kw...) where
     {sysType <: AutonomousODESys, x₀Type <: AbstractVector}
 
     T = eltype(x₀Type)
-    jac_ = if hasmethod(jac, (AbstractMatrix{T}, sysType, x₀Type)) && use_jac
+    jac_ = if hasmethod(jac, (AbstractMatrix{T}, sysType, x₀Type))
         jac
     else
         F = similar(x)
