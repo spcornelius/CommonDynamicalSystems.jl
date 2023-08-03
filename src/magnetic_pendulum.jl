@@ -1,5 +1,8 @@
 export MagneticPendulum
 
+using Distances
+using StaticArrays
+
 struct MagneticPendulum{T, N} <: AutonomousODESys
     ω::T
     α::T

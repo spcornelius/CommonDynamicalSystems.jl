@@ -1,5 +1,8 @@
 export Kuramoto
 
+using Graphs
+using SparseArrays
+
 struct Kuramoto{AType, ωType} <: AutonomousODESys
     A::AType
     ω::ωType

@@ -2,6 +2,7 @@ export find_fixed_point, is_stable
 
 using ForwardDiff
 using LinearAlgebra
+using NLsolve
 using SciMLBase
 
 function find_fixed_point(rhs::Function, jac::Function, x₀::AbstractVector{T}, 

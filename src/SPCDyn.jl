@@ -1,12 +1,6 @@
 module SPCDyn
 
-using Distances
 using FastBroadcast
-using Graphs
-using LinearAlgebra
-using NLsolve
-using SparseArrays
-using StaticArrays
 using UnPack
 
 include("./base.jl")
