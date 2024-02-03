@@ -1,4 +1,4 @@
-export MagneticPendulum
+export MagneticPendulum, magnet_dist, magnetic_potential, energy, closest_magnet
 
 using Distances
 using StaticArrays
@@ -73,4 +73,32 @@ function jac(J::AbstractMatrix{T}, u, sys::MagneticPendulum) where {T}
         J[4, 2] += c4 * (yₘ - y)^2 - c1
     end
     nothing
+end
+
+function magnetic_potential(r, rₘ, h)
+    x, y = r
+    xₘ, yₘ = rₘ
+
+    return -1/sqrt((x - xₘ)^2 + (y - yₘ)^2 + h^2)
+end
+
+function energy(u, p::MagneticPendulum)
+    @unpack ω, α, h, r_mag = p
+    @views r, v = u[1:2], u[3:4]
+
+    # kinetic and simple-harmonic potential energies
+    E = (v[1]^2 + v[2]^2)/2 + ω^2 * (r[1]^2 + r[2]^2)/2
+    for rₘ in r_mag
+        E += magnetic_potential(r, rₘ, h)
+    end
+
+    return E 
+end
+
+function closest_magnet(r, p::MagneticPendulum{<:Any, m}) where {m}
+    @boundscheck begin 
+        n = length(r)
+        n == 2 || error("Supplied r has length $n. Expected r = (x, y).")
+    end
+    all(isfinite, r) ? argmin(euclidean(r, rₘ) for rₘ in p.r_mag) : 0
 end
