@@ -1,4 +1,4 @@
-module SPCDyn
+module CommonDynamicalSystems
 
 using FastBroadcast
 using UnPack
