@@ -1,2 +1,2 @@
-# SPCDyn
-Commonly-used dynamical systems.
+# CommonDynamicalSystems
+Commonly-used dynamical systems + utility functions
