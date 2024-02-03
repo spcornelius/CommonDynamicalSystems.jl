@@ -1,3 +1,4 @@
+using BenchmarkTools
 using CommonDynamicalSystems
 using Test
 
@@ -7,6 +8,10 @@ function testfile(file, testname=defaultname(file))
     println("running test file $(file)")
     @testset "$testname" begin; include(file); end
     return
+end
+
+macro test_noalloc(expr)
+    esc(:(@test @ballocated($expr) == 0))
 end
 
 @testset "CommonDynamicalSystems" begin

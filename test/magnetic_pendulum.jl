@@ -23,7 +23,16 @@ r_mag = [r₁, r₂, r₃]
 end
 
 sys = MagneticPendulum(ω, α, h, r₁, r₂, r₃)
-@testset "magnetic pendulum jacobian" for i=1:10
+@testset "Magnetic pendulum jacobian" for i=1:10
     x = rand(Uniform(-3, 3), 4)
     @test test_jac(sys, x)
+end
+
+@testset "Magnetic pendulum allocations" begin
+    u = rand(Uniform(-3, 3), 4)
+    du = zeros(4)
+    @test_noalloc rhs($du, $u, $sys)
+
+    J = zeros(4, 4)
+    @test_noalloc jac($J, $u, $sys)
 end

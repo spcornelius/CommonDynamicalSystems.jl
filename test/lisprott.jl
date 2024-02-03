@@ -13,5 +13,14 @@ end
 sys = LiSprott(a, b)
 @testset "Li-Sprott jacobian" for i=1:10
     u = rand(Uniform(-10, 10), 4)
-    @test test_jac(sys, x)
+    @test test_jac(sys, u)
+end
+
+@testset "Li-Sprott allocations" begin
+    u = rand(Uniform(-10, 10), 4)
+    du = zeros(4)
+    @test_noalloc rhs($du, $u, $sys)
+
+    J = zeros(4, 4)
+    @test_noalloc jac($J, $u, $sys)
 end

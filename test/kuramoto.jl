@@ -75,3 +75,15 @@ end
     @test test_jac(sys, x)
 end
 
+@testset "Kuramoto allocations" begin
+    n = 10
+    g = erdos_renyi(n, 0.2)
+    sys = KuramotoNetwork(g, rand(n))
+    x = rand(Uniform(-pi, pi), n)
+    dx = zeros(n)
+    J = zeros(n, n)
+
+    @test_noalloc rhs($dx, $x, $sys)
+    @test_noalloc jac($J, $x, $sys)
+end
+
