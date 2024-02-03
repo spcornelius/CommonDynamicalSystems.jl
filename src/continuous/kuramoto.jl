@@ -3,11 +3,11 @@ export KuramotoNetwork
 using Graphs
 using SparseArrays
 
-struct KuramotoNetwork{AType, ωType} <: AutonomousODESys
-    A::AType
+struct KuramotoNetwork{T, ωType} <: AutonomousODESys
+    A::SparseMatrixCSC{T, Int}
     ω::ωType
 
-    function KuramotoNetwork(A::AbstractMatrix{T}, ω::ωType = zero(T)) where {T, ωType}
+    function KuramotoNetwork(A::AbstractMatrix, ω::ωType = zero(T)) where {T, ωType}
         A = sparse(A)
         nr, nc = size(A)
         nr == nc || 
@@ -20,8 +20,7 @@ struct KuramotoNetwork{AType, ωType} <: AutonomousODESys
         num_selfloops == 0 ||
             @warn "Supplied interaction matrix has self-loops; ignoring."
         @views fill!(A[diagind(A)], zero(eltype(A)))
-        A = sparse(A)
-        new{typeof(A), ωType}(A, copy(ω))
+        new{T, ωType}(sparse(A), copy(ω))
     end
 end
 
