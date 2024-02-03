@@ -7,7 +7,7 @@ struct KuramotoNetwork{T, ωType} <: AutonomousODESys
     A::SparseMatrixCSC{T, Int}
     ω::ωType
 
-    function KuramotoNetwork(A::AbstractMatrix, ω::ωType = zero(T)) where {T, ωType}
+    function KuramotoNetwork(A::AbstractMatrix{T}, ω::ωType = zero(T)) where {T, ωType}
         A = sparse(A)
         nr, nc = size(A)
         nr == nc || 
