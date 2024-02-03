@@ -11,9 +11,10 @@ struct MagneticPendulum{T, N} <: AutonomousODESys
 
     function MagneticPendulum{T}(ω, α, h, r_mag...) where {T}
         N = length(r_mag)
-        N > 0 || error("Must have at least one magnet.")
+        N > 0 || 
+            throw(ArgumentError("Must have at least one magnet."))
         all(rₘ -> length(rₘ) == 2, r_mag) || 
-            error("Each magnet position must be a vector or tuple of length 2.")
+            throw(DimensionMismatch("Each magnet position must be a vector or tuple of length 2."))
     
         # convert each element of r_mag to a static vector of length 2
         r_mag = map(SVector{2}, r_mag)
