@@ -1,5 +1,8 @@
 export AbstractODESys, AutonomousODESys, rhs, jac
 
+ScalarOrVec{T} = Union{T, AbstractVector{T}, NTuple{<:Any, T}}
+RealScalarOrVec = ScalarOrVec{<:Real}
+
 # supertype for a system of ODEs. Different ODE systems can be defined
 # by creating subtypes, which should implement in-place versions of
 # rhs and (optionally) jac, representing the differential equations and
