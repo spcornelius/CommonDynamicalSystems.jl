@@ -7,8 +7,8 @@ struct KuramotoNetwork{AType, ωType} <: AutonomousODESys
     A::AType
     ω::ωType
 
-    function KuramotoNetwork(A::AType, ω::ωType) where 
-        {AType <: AbstractSparseMatrix{<:Real}, ωType <: RealScalarOrVec}
+    function KuramotoNetwork(A::AbstractMatrix{T}, ω::ωType = zero(T)) where {T, ωType}
+        A = sparse(A)
         nr, nc = size(A)
         nr == nc || 
             throw(DimensionMismatch("Interaction matrix A must be square."))
@@ -16,24 +16,14 @@ struct KuramotoNetwork{AType, ωType} <: AutonomousODESys
         length(ω) == 1 || length(ω) == nr || 
             throw(DimensionMismatch("Dimension of ω must be compatible with A."))
         
-        A = copy(A)
-        ω = copy(ω)
-
         num_selfloops = sum(A[i, i] != 0 for i=1:nr)
         num_selfloops == 0 ||
             @warn "Supplied interaction matrix has self-loops; ignoring."
         @views fill!(A[diagind(A)], zero(eltype(A)))
-        new{AType, ωType}(A, ω)
+        A = sparse(A)
+        new{typeof(A), ωType}(A, copy(ω))
     end
 end
-
-# arbitrary (not-necessarily sparse) input for A
-KuramotoNetwork(A::AbstractMatrix, ω) = 
-    KuramotoNetwork(sparse(A), ω)
-
-# zero-frequency case
-KuramotoNetwork(A::AbstractMatrix{T}) where {T} = 
-    KuramotoNetwork(A, 0.)
 
 # from a graph
 KuramotoNetwork(g::AbstractGraph, args...) = 
