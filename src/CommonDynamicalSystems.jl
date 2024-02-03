@@ -9,6 +9,7 @@ include("./util/fixed_points.jl")
 include("./util/jacobian.jl")
 
 include("./continuous/kuramoto.jl")
+include("./continuous/lisprott.jl")
 include("./continuous/magnetic_pendulum.jl")
 
 end 
