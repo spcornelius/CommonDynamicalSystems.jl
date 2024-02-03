@@ -4,9 +4,11 @@ using FastBroadcast
 using UnPack
 
 include("./base.jl")
-include("./fixed_points.jl")
-include("./kuramoto.jl")
-include("./magnetic_pendulum.jl")
-include("./util.jl")
+
+include("./util/fixed_points.jl")
+include("./util/jacobian.jl")
+
+include("./continuous/kuramoto.jl")
+include("./continuous/magnetic_pendulum.jl")
 
 end 
