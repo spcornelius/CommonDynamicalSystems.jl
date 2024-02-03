@@ -11,4 +11,5 @@ end
 
 @testset "CommonDynamicalSystems" begin
     testfile("./kuramoto.jl")
+    testfile("./lisprott.jl")
 end
