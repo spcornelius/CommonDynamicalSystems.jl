@@ -2,7 +2,6 @@ using CommonDynamicalSystems
 using Distributions
 using Graphs
 using LinearAlgebra
-using Random
 using SimpleWeightedGraphs
 using SparseArrays
 using StatsBase
