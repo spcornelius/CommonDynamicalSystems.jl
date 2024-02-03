@@ -1,39 +1,45 @@
-export Kuramoto
+export KuramotoNetwork
 
 using Graphs
 using SparseArrays
 
-struct Kuramoto{AType, ωType} <: AutonomousODESys
+struct KuramotoNetwork{AType, ωType} <: AutonomousODESys
     A::AType
     ω::ωType
 
-    function Kuramoto(A::AType, ω::ωType) where {AType <: AbstractSparseMatrix,
-                                                 ωType}
+    function KuramotoNetwork(A::AType, ω::ωType) where 
+        {AType <: AbstractSparseMatrix{<:Real}, ωType <: RealScalarOrVec}
         nr, nc = size(A)
-        nr == nc || error("Interaction matrix A must be square.")
-        if length(ω) > 1
-            length(ω) == nr || error("Dimension of ω must be compatible with A.")
-        end
+        nr == nc || 
+            throw(DimensionMismatch("Interaction matrix A must be square."))
+
+        length(ω) == 1 || length(ω) == nr || 
+            throw(DimensionMismatch("Dimension of ω must be compatible with A."))
+        
         A = copy(A)
         ω = copy(ω)
+
+        num_selfloops = sum(A[i, i] != 0 for i=1:nr)
+        num_selfloops == 0 ||
+            @warn "Supplied interaction matrix has self-loops; ignoring."
         @views fill!(A[diagind(A)], zero(eltype(A)))
         new{AType, ωType}(A, ω)
     end
 end
 
 # arbitrary (not-necessarily sparse) input for A
-Kuramoto(A::AbstractMatrix, ω) = Kuramoto(sparse(A), ω)
+KuramotoNetwork(A::AbstractMatrix, ω) = 
+    KuramotoNetwork(sparse(A), ω)
 
 # zero-frequency case
-Kuramoto(A::AbstractMatrix{T}) where {T} = Kuramoto(A, zero(T))
+KuramotoNetwork(A::AbstractMatrix{T}) where {T} = 
+    KuramotoNetwork(A, 0.)
 
 # from a graph
-Kuramoto(g::AbstractGraph, ω) = Kuramoto(adjacency_matrix(g), ω)
+KuramotoNetwork(g::AbstractGraph, args...) = 
+    KuramotoNetwork(adjacency_matrix(g), args...)
 
-# zero-frequency case
-Kuramoto(g::AbstractGraph) = Kuramoto(adjacency_matrix(g))
-
-function rhs(dθdt, θ, sys::Kuramoto)
+function rhs(dθdt, θ, sys::KuramotoNetwork)
     @unpack A, ω = sys
     @.. dθdt = ω
     rows = rowvals(A)
@@ -46,7 +52,7 @@ function rhs(dθdt, θ, sys::Kuramoto)
     nothing
 end
 
-function jac(J::AbstractMatrix{T}, θ, sys::Kuramoto) where {T <: Real}
+function jac(J::AbstractMatrix{T}, θ, sys::KuramotoNetwork) where {T <: Real}
     @unpack A = sys
     rows = rowvals(A)
     nzv = nonzeros(A)
