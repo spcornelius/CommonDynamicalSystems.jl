@@ -12,4 +12,5 @@ end
 @testset "CommonDynamicalSystems" begin
     testfile("./kuramoto.jl")
     testfile("./lisprott.jl")
+    testfile("./magnetic_pendulum.jl")
 end
