@@ -1,10 +1,10 @@
 export LiSprott
 
-struct LiSprott{T <: Real} <: AutonomousODESys
+struct LiSprott{T} <: AutonomousODESys
     a::T
     b::T
 
-    function LiSprott(a::aType, b::bType) where {aType <: Real, bType <: Real}
+    function LiSprott(a::aType, b::bType) where {aType, bType}
         T = Base.promote_type(aType, bType)
         new{T}(a, b)
     end

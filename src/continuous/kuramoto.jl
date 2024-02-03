@@ -42,7 +42,7 @@ function rhs(dθdt, θ, sys::KuramotoNetwork)
     nothing
 end
 
-function jac(J::AbstractMatrix{T}, θ, sys::KuramotoNetwork) where {T <: Real}
+function jac(J::AbstractMatrix{T}, θ, sys::KuramotoNetwork) where {T}
     @unpack A = sys
     rows = rowvals(A)
     nzv = nonzeros(A)
