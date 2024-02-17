@@ -1,6 +1,5 @@
 export MagneticPendulum, magnet_dist, magnetic_potential, energy, closest_magnet
 
-using Distances
 using StaticArrays
 
 struct MagneticPendulum{T, N} <: AutonomousODESys
@@ -31,7 +30,11 @@ end
 MagneticPendulum{T}(sys::MagneticPendulum) where {T} =
     MagneticPendulum{T}(sys.ω, sys.α, sys.h, sys.r_mag...)
 
-@inline magnet_dist(r, rₘ, h) = sqrt(sqeuclidean(r, rₘ) + h^2)
+@inline function magnet_dist(r, rₘ, h)
+    x, y = r
+    xₘ, yₘ = rₘ
+    hypot(x-xₘ, y-yₘ, h)
+end
 
 function rhs(du, u, sys::MagneticPendulum)
     @unpack ω, α, h, r_mag = sys
@@ -101,5 +104,5 @@ function closest_magnet(r, p::MagneticPendulum{<:Any, m}) where {m}
         n = length(r)
         n == 2 || error("Supplied r has length $n. Expected r = (x, y).")
     end
-    all(isfinite, r) ? argmin(euclidean(r, rₘ) for rₘ in p.r_mag) : 0
+    all(isfinite, r) ? argmin(magnet_dist(r, rₘ, p.h) for rₘ in p.r_mag) : 0
 end
